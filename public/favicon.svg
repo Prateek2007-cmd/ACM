@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ACM">
+  <defs>
+    <linearGradient id="fBody" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="0" y2="410">
+      <stop offset="0" stop-color="#8FECFF" />
+      <stop offset="0.2" stop-color="#3FB4FF" />
+      <stop offset="0.58" stop-color="#1E64FF" />
+      <stop offset="1" stop-color="#04206E" />
+    </linearGradient>
+    <linearGradient id="fGloss" gradientUnits="userSpaceOnUse" x1="0" y1="96" x2="0" y2="300">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.76" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+    <filter id="fShadow" x="-40%" y="-40%" width="180%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+    <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="14" />
+    </filter>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g id="fA">
+      <path d="M126 389 L256 123 L386 389" />
+      <path d="M190 286 L322 286" />
+    </g>
+    <g transform="translate(0 10)">
+      <use href="#fA" stroke="#00040F" stroke-width="92" opacity="0.75" filter="url(#fShadow)" />
+    </g>
+    <use href="#fA" stroke="#1E63FF" stroke-width="104" opacity="0.45" filter="url(#fGlow)" />
+    <use href="#fA" stroke="#7FE3FF" stroke-width="96" opacity="0.4" filter="url(#fGlow)" />
+    <g transform="translate(0 3)">
+      <use href="#fA" stroke="#04206E" stroke-width="80" />
+    </g>
+    <g transform="translate(0 -1)">
+      <use href="#fA" stroke="url(#fBody)" stroke-width="76" />
+    </g>
+    <use href="#fA" stroke="url(#fGloss)" stroke-width="76" />
+    <g transform="translate(0 -6)">
+      <use href="#fA" stroke="#FFFFFF" stroke-width="11" opacity="0.24" />
+    </g>
+  </g>
+</svg>
