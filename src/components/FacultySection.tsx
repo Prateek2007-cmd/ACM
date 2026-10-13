@@ -2,9 +2,50 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { reducedMotion } from '../lib/store';
-import { FACULTY } from '../data/content';
+import { FACULTY, type FacultyPerson } from '../data/content';
+import { asset } from '../data/media';
 
 gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * A portrait slot per person.
+ *
+ * With a photo it renders the photo; without one it renders the person's initials on a neutral
+ * plate. The placeholder is deliberately not a stand-in face or a stock portrait — it is a slot
+ * with the slot's occupant named underneath, so nothing on the page is a person who is not there.
+ */
+function initialsOf(name: string) {
+  if (/^to be/i.test(name)) return '—';
+  return name
+    .replace(/\b(dr|prof|mr|ms|mrs)\.?\s*/gi, '')
+    .split(/[\s.]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
+function FacultyCard({ person }: { person: FacultyPerson }) {
+  return (
+    <article className="fac-person fac-rise">
+      <span className="fac-portrait">
+        {person.photo
+          ? <img src={asset(person.photo)} alt="" loading="lazy" decoding="async" />
+          : <span className="fac-initials" aria-hidden="true">{initialsOf(person.name)}</span>}
+      </span>
+      <div className="fac-person-body">
+        <span className="team-role">{person.role}{person.department ? ` · ${person.department}` : ''}</span>
+        <p className="team-name">{person.name}</p>
+        <p className="team-detail">{person.detail}</p>
+        {person.profile ? (
+          <a className="fac-profile" href={person.profile} target="_blank" rel="noopener noreferrer" data-cursor="magnetic">
+            Department profile →
+          </a>
+        ) : null}
+      </div>
+    </article>
+  );
+}
 
 /** The chapter's advisory network, drawn as an interface. */
 const NODES: { x: number; y: number; label: string; sub: string; key: string }[] = [
@@ -165,13 +206,21 @@ export default function FacultySection() {
           <strong>{FACULTY.readout.value}</strong>
           <span>{FACULTY.readout.status}</span>
         </div>
-        {FACULTY.people.map((p) => (
-          <article className="fac-card fac-rise" key={p.role}>
-            <span className="team-role">{p.role}</span>
-            <p className="team-name">{p.name}</p>
-            <p className="team-detail">{p.detail}</p>
-          </article>
-        ))}
+
+        <p className="fac-group fac-rise">{FACULTY.groups.chapter}</p>
+        <div className="fac-people">
+          {FACULTY.people.map((p) => <FacultyCard person={p} key={p.role} />)}
+        </div>
+
+        <p className="fac-group fac-rise">{FACULTY.groups.departments}</p>
+        <div className="fac-people">
+          {FACULTY.departments.map((p) => <FacultyCard person={p} key={p.name} />)}
+        </div>
+
+        <div className="fac-sources fac-rise">
+          <p>{FACULTY.sourceNote}</p>
+          <p className="fac-note-quiet">{FACULTY.photoNote}</p>
+        </div>
       </div>
 
       <p className="fac-foot">{FACULTY.note}</p>

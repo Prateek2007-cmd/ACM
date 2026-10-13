@@ -1,100 +1,72 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="65 15 1430 665" preserveAspectRatio="xMidYMid meet" role="img" aria-label="ACM — Association for Computing Machinery">
   <title>ACM</title>
   <defs>
-    <!-- uppercase A C M, drawn as one smooth liquid stroke system -->
+    <!-- uppercase A C M, drawn with bowed strokes so the material reads as poured glass -->
     <g id="acmGlyphs" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <!-- A -->
-      <path d="M180 550 L330 130 L480 550" />
-      <path d="M250 410 L410 410" />
+      <path d="M186 556 C224 452 274 306 322 156 Q332 134 344 134 Q356 134 366 156 C414 306 464 452 502 556" />
+      <path d="M252 416 Q344 398 436 416" />
       <!-- C -->
-      <path d="M934 227.5 A175 175 0 1 0 934 452.5" />
+      <path d="M934 232 C776 240 726 300 726 344 C726 388 776 448 934 456" />
       <!-- M -->
-      <path d="M1080 550 L1080 130 L1230 430 L1380 130 L1380 550" />
+      <path d="M1074 556 C1070 420 1072 226 1078 152 Q1082 132 1096 132 Q1108 132 1116 154 C1146 236 1176 316 1226 424 C1276 316 1306 236 1336 154 Q1344 132 1356 132 Q1370 132 1374 152 C1380 226 1382 420 1378 556" />
     </g>
 
-    <!-- the lit body of the liquid: cyan at the waterline, deep blue in the volume -->
-    <linearGradient id="acmBody" gradientUnits="userSpaceOnUse" x1="0" y1="118" x2="0" y2="580">
-      <stop offset="0" stop-color="#8FECFF" />
-      <stop offset="0.16" stop-color="#3FB4FF" />
-      <stop offset="0.42" stop-color="#1E64FF" />
-      <stop offset="0.72" stop-color="#0B34C8" />
-      <stop offset="1" stop-color="#041C86" />
+    <!-- GLASS · the body is clear. Only a faint white film, so the surface is visible at all while
+         the page still shows straight through it. Every stop is a pure grey: no hue anywhere. -->
+    <linearGradient id="acmGlass" gradientUnits="userSpaceOnUse" x1="0" y1="118" x2="0" y2="580">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.16" />
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.1" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.07" />
     </linearGradient>
 
-    <!-- the shadow side, sitting under the body to give the mark real thickness -->
-    <linearGradient id="acmVolume" gradientUnits="userSpaceOnUse" x1="0" y1="130" x2="0" y2="600">
-      <stop offset="0" stop-color="#0A3BAF" />
-      <stop offset="0.55" stop-color="#04206E" />
-      <stop offset="1" stop-color="#010A2E" />
+    <!-- THE EDGE · a bright band where the surface turns away. This is what draws the letterform. -->
+    <linearGradient id="acmEdgeLight" gradientUnits="userSpaceOnUse" x1="0" y1="90" x2="0" y2="620">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.72" />
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.44" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.52" />
     </linearGradient>
 
-    <!-- electric rim that peeks around every edge -->
-    <linearGradient id="acmRim" gradientUnits="userSpaceOnUse" x1="0" y1="90" x2="0" y2="620">
-      <stop offset="0" stop-color="#EAFBFF" />
-      <stop offset="0.2" stop-color="#CFF3FF" />
-      <stop offset="0.5" stop-color="#63B4FF" />
-      <stop offset="0.8" stop-color="#1F6BFF" />
-      <stop offset="1" stop-color="#7DEFFF" />
+    <!-- …and just inside it the glass darkens: refraction, the band that makes it read as glass -->
+    <linearGradient id="acmEdgeDark" gradientUnits="userSpaceOnUse" x1="0" y1="130" x2="0" y2="600">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.22" />
+      <stop offset="0.6" stop-color="#000000" stop-opacity="0.14" />
+      <stop offset="1" stop-color="#000000" stop-opacity="0.26" />
     </linearGradient>
 
-    <!-- glossy sheen across the top of the liquid -->
-    <linearGradient id="acmGloss" gradientUnits="userSpaceOnUse" x1="0" y1="112" x2="0" y2="470">
-      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.8" />
-      <stop offset="0.3" stop-color="#E7F8FF" stop-opacity="0.32" />
-      <stop offset="0.66" stop-color="#CDEBFF" stop-opacity="0.05" />
-      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
-    </linearGradient>
-
-    <!-- a narrow wet band running diagonally across the mark -->
-    <linearGradient id="acmSheen" gradientUnits="userSpaceOnUse" x1="200" y1="640" x2="760" y2="150">
-      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0" />
-      <stop offset="0.36" stop-color="#FFFFFF" stop-opacity="0.12" />
-      <stop offset="0.52" stop-color="#EAFBFF" stop-opacity="0.66" />
-      <stop offset="0.68" stop-color="#FFFFFF" stop-opacity="0.1" />
-      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
-    </linearGradient>
+    <!-- the bright edge (103 → 79) and the refraction band behind it (79 → 57) -->
+    <mask id="acmEdge" maskUnits="userSpaceOnUse" x="-20" y="-20" width="1620" height="760">
+      <use href="#acmGlyphs" stroke="#FFFFFF" stroke-width="103" />
+      <use href="#acmGlyphs" stroke="#000000" stroke-width="79" />
+    </mask>
+    <mask id="acmWall" maskUnits="userSpaceOnUse" x="-20" y="-20" width="1620" height="760">
+      <use href="#acmGlyphs" stroke="#FFFFFF" stroke-width="79" />
+      <use href="#acmGlyphs" stroke="#000000" stroke-width="57" />
+    </mask>
 
     <filter id="acmShadow" x="-30%" y="-40%" width="160%" height="200%" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="20" />
-    </filter>
-    <filter id="acmGlowWide" x="-40%" y="-50%" width="180%" height="200%" color-interpolation-filters="sRGB">
       <feGaussianBlur stdDeviation="18" />
-    </filter>
-    <filter id="acmGlowTight" x="-40%" y="-50%" width="180%" height="200%" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="9" />
-    </filter>
-    <!-- makes the sheen drift like water instead of sitting as a clean gradient -->
-    <filter id="acmWet" x="-20%" y="-30%" width="140%" height="160%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.014" numOctaves="2" seed="7" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G" result="wet" />
-      <feGaussianBlur in="wet" stdDeviation="1.4" />
     </filter>
   </defs>
 
-  <!-- 1 · contact shadow: the mark sits in its own pool of light -->
-  <g transform="translate(0 18)">
-    <use href="#acmGlyphs" stroke="#00040F" stroke-width="104" opacity="0.8" filter="url(#acmShadow)" />
+  <!-- 1 · the soft shadow the mark casts -->
+  <g transform="translate(0 12)">
+    <use href="#acmGlyphs" stroke="#050505" stroke-width="104" opacity="0.55" filter="url(#acmShadow)" />
   </g>
-  <!-- 2 · wide blue bloom -->
-  <use href="#acmGlyphs" stroke="#1E63FF" stroke-width="120" opacity="0.42" filter="url(#acmGlowWide)" />
-  <!-- 3 · tight electric halo -->
-  <use href="#acmGlyphs" stroke="#5FD8FF" stroke-width="110" opacity="0.4" filter="url(#acmGlowTight)" />
-  <!-- 4 · rim light -->
-  <use href="#acmGlyphs" stroke="url(#acmRim)" stroke-width="104" opacity="0.96" />
-  <!-- 5 · volume (shadow side) -->
-  <g transform="translate(0 5)">
-    <use href="#acmGlyphs" stroke="url(#acmVolume)" stroke-width="97" />
+  <!-- 2 · the glass itself: a faint film, and the page shows through it -->
+  <g transform="translate(0 -1)">
+    <use href="#acmGlyphs" stroke="url(#acmGlass)" stroke-width="93" />
   </g>
-  <!-- 6 · the lit body, lifted a hair so the top edge catches the light -->
-  <g transform="translate(0 -2)">
-    <use href="#acmGlyphs" stroke="url(#acmBody)" stroke-width="93" />
+  <!-- 3 · refraction, just inside the edge -->
+  <g mask="url(#acmWall)">
+    <use href="#acmGlyphs" stroke="url(#acmEdgeDark)" stroke-width="79" />
   </g>
-  <!-- 7 · glossy top -->
-  <use href="#acmGlyphs" stroke="url(#acmGloss)" stroke-width="93" />
-  <!-- 8 · water-displaced sheen -->
-  <use href="#acmGlyphs" stroke="url(#acmSheen)" stroke-width="66" opacity="0.9" filter="url(#acmWet)" />
-  <!-- 9 · specular line riding the upper surface -->
-  <g transform="translate(0 -7)">
-    <use href="#acmGlyphs" stroke="#FFFFFF" stroke-width="13" opacity="0.22" />
+  <!-- 4 · the bright edge -->
+  <g mask="url(#acmEdge)">
+    <use href="#acmGlyphs" stroke="url(#acmEdgeLight)" stroke-width="103" />
+  </g>
+  <!-- 5 · one specular running along the top of each stroke -->
+  <g transform="translate(0 -6)">
+    <use href="#acmGlyphs" stroke="#FFFFFF" stroke-width="12" opacity="0.28" />
   </g>
 </svg>

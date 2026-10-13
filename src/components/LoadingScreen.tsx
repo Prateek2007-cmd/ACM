@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { lowPower, reducedMotion, world } from '../lib/store';
-import { SHOWCASE, letterFormedAt } from '../lib/liquid';
+import { reducedMotion, world } from '../lib/store';
+import { SHOWCASE } from '../lib/liquid';
 import { BRAND } from '../data/brand';
-import LiquidMonogram from './LiquidMonogram';
+import LiquidGlassMark from './LiquidGlassMark';
 import SmokeVideo from './SmokeVideo';
 
 const PHASES = [...BRAND.pillars];
@@ -15,13 +15,12 @@ const MAX_WAIT_MS = 1600; // never hold the curtain longer than this while fonts
 const ARC_LEN = 2 * Math.PI * 47;
 
 /**
- * "Ignition" — the opening hook, structurally the same as the reference site.
- * 1. bezel ticks sweep in  2. the liquid ACM monogram forms in the circular stage
- * 3. the ring fills 000→100 across the full A → C → M sequence while the four pillars cycle
- * 4. the monogram flies toward the camera, a light seam splits the screen and the site opens.
+ * "Ignition" — the opening hook.
+ * 1. bezel ticks sweep in  2. the glass ACM mark forms in the circular stage
+ * 3. the ring fills 000→100 while the four pillars cycle and the A · C · M chips light in turn
+ * 4. the mark flies toward the camera, a light seam splits the screen and the site opens.
  *
- * The only change from the reference: the photograph that used to sit in the circle is replaced
- * by a liquid material that morphs between the letters A, C and M (see LiquidMonogram).
+ * The mark is the chapter's own glass artwork — see LiquidGlassMark.
  */
 export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [skip] = useState(() => reducedMotion);
@@ -66,14 +65,13 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
     let saidReady = false;
 
     const render = () => {
-      const t = (state.p * COUNT_MS) / 1000; // seconds into the A → C → M showcase
       if (pct.current) pct.current.textContent = String(Math.round(state.p * 100)).padStart(3, '0');
       if (arc.current) arc.current.style.strokeDashoffset = String(len * (1 - state.p));
       if (arcGlow.current) arcGlow.current.style.strokeDashoffset = String(len * (1 - state.p));
       const lit = Math.floor(state.p * TICKS);
       ticks.forEach((tk, i) => tk.classList.toggle('on', i < lit));
-      // each letter lights up on its chip the moment the liquid has formed it
-      chips.forEach((chip, i) => chip.classList.toggle('on', t >= letterFormedAt(i)));
+      // A · C · M light up in turn as the mark settles, then stay lit
+      chips.forEach((chip, i) => chip.classList.toggle('on', state.p >= (i + 0.4) / chips.length));
       if (state.p >= 1 && !saidReady && phase.current) {
         saidReady = true;
         gsap.fromTo(phase.current, { yPercent: 60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.45, ease: 'expo.out' });
@@ -99,7 +97,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       .to(r.querySelectorAll('.ig-readout, .ig-phase-wrap, .ig-letters'), { opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.6)
       .to(state, { p: 1, duration: COUNT_MS / 1000, ease: 'power1.inOut', onUpdate: render }, 0.6)
       // completion: ring flares, monogram breathes, then flies through the camera
-      .to(r.querySelector('.ig-ring'), { filter: 'drop-shadow(0 0 22px rgba(110,168,255,0.9))', duration: 0.35, ease: 'power2.out' })
+      .to(r.querySelector('.ig-ring'), { filter: 'drop-shadow(0 0 22px rgba(255,255,255,0.7))', duration: 0.35, ease: 'power2.out' })
       .to(r.querySelector('.ig-mono'), { scale: 1.04, duration: 0.35, ease: 'power2.out' }, '<')
       .to(r.querySelectorAll('.ig-corner, .ig-readout, .ig-phase-wrap, .ig-letters, .ig-bezel, .ig-ring, .ig-smoke, .ig-halo'), { opacity: 0, duration: 0.4, ease: 'power2.in' }, '+=0.15')
       .to(r.querySelector('.ig-mono'), { scale: 7, opacity: 0, duration: 0.9, ease: 'expo.in' }, '<')
@@ -138,9 +136,10 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         <svg className="ig-ring" viewBox="0 0 100 100" aria-hidden="true">
           <defs>
             <linearGradient id="ig-grad" x1="0" y1="0" x2="1" y2="1">
+              {/* neutral greys only: the ring frames clear glass, so it must not tint it */}
               <stop offset="0" stopColor="#ffffff" />
-              <stop offset="0.5" stopColor="#8ab8ff" />
-              <stop offset="1" stopColor="#2f7bff" />
+              <stop offset="0.5" stopColor="#d2d5d9" />
+              <stop offset="1" stopColor="#8f9499" />
             </linearGradient>
           </defs>
           <circle cx="50" cy="50" r="47" className="ig-track" />
@@ -150,9 +149,8 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         </svg>
         <div className="ig-mono-pos">
           <div className="ig-mono" data-in>
-            <div className="ig-liquid">
-              {/* the buffer is rasterised per pixel: smaller on phones and low-core machines */}
-              <LiquidMonogram size={lowPower ? 160 : 208} />
+            <div className="ig-liquid ig-liquid--mark">
+              <LiquidGlassMark />
             </div>
           </div>
         </div>

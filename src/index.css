@@ -224,9 +224,11 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 /* ---------- loader — "Ignition" */
 .loader { position: fixed; inset: 0; z-index: 9999; color: #f5f5f2; overflow: hidden; }
 .loader-half { position: absolute; left: 0; right: 0; height: 50.5%; background: #030406; }
-.loader-half.top { top: 0; background: radial-gradient(80% 120% at 50% 100%, rgba(47,123,255,0.10), transparent 60%), #030406; }
-.loader-half.bottom { bottom: 0; background: radial-gradient(80% 120% at 50% 0%, rgba(47,123,255,0.10), transparent 60%), #030406; }
-.loader-seam { position: absolute; left: 0; right: 0; top: 50%; height: 1px; z-index: 3; background: linear-gradient(90deg, transparent, #6ea8ff, #ffffff, #6ea8ff, transparent); box-shadow: 0 0 24px 2px rgba(110,168,255,0.8); transform: scaleX(0); }
+/* The whole loader is neutral: it is the room the glass sits in. Any hue back here shows through the
+   mark, so every layer behind it is a pure grey. */
+.loader-half.top { top: 0; background: radial-gradient(80% 120% at 50% 100%, rgba(255,255,255,0.055), transparent 60%), #030406; }
+.loader-half.bottom { bottom: 0; background: radial-gradient(80% 120% at 50% 0%, rgba(255,255,255,0.055), transparent 60%), #030406; }
+.loader-seam { position: absolute; left: 0; right: 0; top: 50%; height: 1px; z-index: 3; background: linear-gradient(90deg, transparent, #b9bcc2, #ffffff, #b9bcc2, transparent); box-shadow: 0 0 24px 2px rgba(255,255,255,0.55); transform: scaleX(0); }
 .loader > *:not(.loader-half):not(.loader-seam) { z-index: 2; }
 .ig-corner { position: absolute; font: 500 11px/1.4 'Geist Mono', monospace; letter-spacing: 0.22em; text-transform: uppercase; color: #8b8f98; opacity: 0; }
 .ig-tl { top: 28px; left: 32px; color: #f5f5f2; } .ig-tr { top: 28px; right: 32px; text-align: right; }
@@ -235,7 +237,7 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 .ig-bezel, .ig-ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .ig-tick { stroke: rgba(255,255,255,0.14); stroke-width: 0.35; stroke-linecap: round; transform-box: fill-box; transform-origin: center; transition: stroke 0.25s; }
 .ig-tick.major { stroke-width: 0.6; stroke: rgba(255,255,255,0.28); }
-.ig-tick.on { stroke: #8ab8ff; } .ig-tick.major.on { stroke: #ffffff; }
+.ig-tick.on { stroke: #e9eaec; } .ig-tick.major.on { stroke: #ffffff; }
 .ig-ring { transform: rotate(-90deg) scale(0.86); }
 .ig-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 0.5; }
 .ig-arc { fill: none; stroke: url(#ig-grad); stroke-width: 0.9; stroke-linecap: round; }
@@ -245,7 +247,7 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
   box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 30px 80px -20px rgba(255,42,31,0.45); }
 .ig-mono > div { width: 100%; }
 .ig-readout { position: absolute; left: 50%; bottom: -7%; transform: translateX(-50%); font: 500 clamp(13px, 1.6vmin, 16px)/1 'Geist Mono', monospace; letter-spacing: 0.3em; color: #d7e2ea; opacity: 0; font-variant-numeric: tabular-nums; }
-.ig-readout sup { font-size: 0.7em; margin-left: 2px; color: #6ea8ff; }
+.ig-readout sup { font-size: 0.7em; margin-left: 2px; color: #c9ccd1; }
 .ig-phase-wrap { position: absolute; left: 0; right: 0; bottom: clamp(56px, 8vh, 96px); display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: 0; }
 .ig-phase-label { font: 500 10px/1 'Geist Mono', monospace; letter-spacing: 0.35em; text-transform: uppercase; color: #5c5c66; }
 .ig-phase-mask { display: block; overflow: hidden; padding: 0 0.2em 0.1em; }
@@ -657,7 +659,9 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 /* loader: the haze sits just behind-right of the monogram, like the rim light in the photos */
 /* The haze in the source video runs right up to the frame's right and top edges, so the mask must reach
    full transparency before every edge of the box (closest-side), or a hard vertical line shows on screen. */
-.ig-smoke { inset: auto; left: 50%; top: 44%; width: calc(min(520px, 62vmin) * 3.2); aspect-ratio: 16 / 9; transform: translate(-72%, -42%); z-index: 1 !important; opacity: 0.9;
+/* the haze the reference wraps its sphere in — the blue video is drained to neutral grey, so it reads
+   as light around the glass instead of tinting it */
+.ig-smoke { filter: grayscale(1); inset: auto; left: 50%; top: 44%; width: calc(min(520px, 62vmin) * 3.2); aspect-ratio: 16 / 9; transform: translate(-72%, -42%); z-index: 1 !important; opacity: 0.9;
   -webkit-mask-image: radial-gradient(closest-side at 64% 46%, #000 50%, rgba(0,0,0,0.55) 75%, transparent 100%);
   mask-image: radial-gradient(closest-side at 64% 46%, #000 50%, rgba(0,0,0,0.55) 75%, transparent 100%); }
 @media (max-width: 767px) { .ig-smoke { width: calc(86vw * 3.2); } }
@@ -707,23 +711,35 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 
 /* ================================================================ ACM chapter layer */
 
-/* ---------- brand mark (uppercase, horizontal, blue) */
+/* ---------- brand mark: clear water. The asset is colourless by construction (see
+   src/lib/water.ts and public/acm-logo.svg), so the only thing asked of the page is depth:
+   a very quiet neutral shadow, not a glow — a bright halo is what makes a grey mark read white. */
 .acm-logo { display: block; width: 100%; height: auto; }
-.nav-logo { height: clamp(19px, 2.3vw, 27px); width: auto; display: block; filter: drop-shadow(0 2px 14px rgba(47,123,255,0.5)); }
+.nav-logo { height: clamp(19px, 2.3vw, 27px); width: auto; display: block; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.55)); }
 .foot-logo { height: 20px; width: auto; display: block; opacity: 0.92; }
 /* The lockup sits above the eyebrow, so it has to stay modest: at full hero width the mark was
    running up under the floating nav. */
-.hc-brand { width: clamp(132px, 13vw, 184px); margin-bottom: 22px; filter: drop-shadow(0 6px 26px rgba(47,123,255,0.45)); }
+.hc-brand { width: clamp(132px, 13vw, 184px); margin-bottom: 22px; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6)); }
 .hc-brand .acm-logo { width: 100%; }
-.share-logo { width: clamp(190px, 30vw, 380px); margin: 0 auto; filter: drop-shadow(0 10px 40px rgba(47,123,255,0.45)); }
+.share-logo { width: clamp(190px, 30vw, 380px); margin: 0 auto; filter: drop-shadow(0 12px 34px rgba(0,0,0,0.6)); }
+/* The mark is see-through, so it takes on whatever sits behind it. These two lockups land on the
+   site's blue fields, which would tint clear glass blue — so each gets a neutral pocket to sit in.
+   Both already create a stacking context (the drop-shadow filter), so the plate can go behind the
+   image without escaping behind the gradient itself. */
+.hc-brand, .share-logo { position: relative; }
+.hc-brand::before, .share-logo::before { content: ''; position: absolute; inset: -26% -10%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(3,4,8,0.92), rgba(3,4,8,0.6) 58%, transparent 100%); }
 
-/* ---------- loader: the circular stage now holds a liquid monogram */
+/* ---------- loader: the circular stage is a plain pane of glass holding the monogram.
+   Kept deliberately plain — a quiet neutral dish and one thin rim — because a bright dish under a
+   clear mark is what makes the mark read as a white shape instead of as glass. */
 .ig-liquid { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 50%; overflow: hidden;
-  background: radial-gradient(circle at 32% 24%, rgba(110,168,255,0.24), rgba(10,61,255,0.12) 46%, rgba(3,4,6,0.96) 78%);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.09), 0 40px 120px -30px rgba(47,123,255,0.75), inset 0 0 70px rgba(10,61,255,0.35); }
+  background: radial-gradient(circle at 34% 26%, rgba(255,255,255,0.07), rgba(255,255,255,0.02) 44%, rgba(4,5,8,0.9) 84%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
 .ig-liquid canvas { display: block; width: 100%; height: 100%; }
+/* a single soft skim of light across the top of the glass */
 .ig-liquid::after { content: ''; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
-  background: radial-gradient(120% 90% at 30% 10%, rgba(255,255,255,0.16), transparent 56%); }
+  background: radial-gradient(74% 52% at 32% 8%, rgba(255,255,255,0.14), transparent 62%); }
 
 /* ---------- hero: liquid blue atmosphere instead of photography */
 .hero-liquid, .hc-liquid-fallback {
@@ -825,9 +841,9 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 /* ================================================================ loader — extra layers around the liquid monogram */
 .ig-halo { position: absolute; left: 50%; top: 44%; width: calc(min(520px, 62vmin) * 1.9); aspect-ratio: 1; transform: translate(-50%, -50%);
   border-radius: 50%; pointer-events: none; z-index: 1;
-  background: radial-gradient(circle, rgba(47,123,255,0.34), rgba(10,61,255,0.10) 46%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.13), rgba(255,255,255,0.04) 46%, transparent 70%);
   filter: blur(34px); animation: igHalo 4.4s ease-in-out infinite; }
-@keyframes igHalo { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.95; } }
+@keyframes igHalo { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.55; } }
 
 /* a slow satellite sweep on the progress ring */
 .ig-sweep { fill: none; stroke: url(#ig-grad); stroke-width: 1.1; stroke-linecap: round; stroke-dasharray: 26 269; opacity: 0.6;
@@ -840,9 +856,9 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 .ig-letters { position: absolute; left: 50%; transform: translateX(-50%); bottom: -19%; display: flex; gap: 16px; opacity: 0; }
 .ig-letters span { font: 700 13px/1 'Geist Mono', monospace; letter-spacing: 0.28em; color: #39405a; opacity: 0.6;
   transition: color 0.35s ease, text-shadow 0.35s ease, opacity 0.35s ease; }
-.ig-letters span.on { color: #f5f5f2; opacity: 1; text-shadow: 0 0 18px rgba(110,168,255,0.95); }
+.ig-letters span.on { color: #f5f5f2; opacity: 1; text-shadow: 0 0 18px rgba(255,255,255,0.6); }
 .ig-letters span.on::after { content: ''; display: block; height: 1px; margin-top: 6px;
-  background: linear-gradient(90deg, transparent, #6ea8ff, transparent); }
+  background: linear-gradient(90deg, transparent, #ffffff, transparent); }
 @media (max-width: 767px) { .ig-halo { width: calc(86vw * 1.9); } .ig-letters { bottom: -22%; gap: 12px; } .ig-letters span { font-size: 11px; } }
 @media (prefers-reduced-motion: reduce) { .ig-halo, .ig-sweep { animation: none; } }
 
@@ -892,3 +908,185 @@ main section p, main section li { text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
 @media (prefers-reduced-motion: reduce) {
   .fac-lit { clip-path: none; } .fac-line { display: none; } .fac-pulse { animation: none; }
 }
+
+/* ---------- faculty: portrait slots (photo, or the person's initials) ---------- */
+.fac-panel { max-height: calc(100% - clamp(190px, 22vh, 240px)); overflow: hidden; }
+.fac-group { font: 600 9.5px/1 'Geist Mono', monospace; letter-spacing: 0.28em; text-transform: uppercase; color: #6ea8ff; margin-top: 4px; }
+.fac-people { display: grid; gap: 8px; }
+.fac-person { display: grid; grid-template-columns: 46px 1fr; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.10);
+  background: linear-gradient(180deg, rgba(12,18,34,0.82), rgba(5,8,18,0.82)); }
+/* the slot itself: a square, rimmed like the rest of the site's glass */
+.fac-portrait { position: relative; width: 46px; aspect-ratio: 1; border-radius: 13px; overflow: hidden; display: grid; place-items: center;
+  background: radial-gradient(120% 120% at 30% 22%, rgba(138,184,255,0.22), rgba(6,10,22,0.9) 70%);
+  box-shadow: inset 0 0 0 1px rgba(138,184,255,0.28); }
+.fac-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fac-initials { font: 700 14px/1 'Geist Mono', monospace; letter-spacing: 0.06em; color: #d7e2ea; }
+.fac-person-body { min-width: 0; }
+.fac-person .team-role { font-size: 9.5px; line-height: 1.4; }
+.fac-person .team-name { margin-top: 3px; font-size: 0.95rem; line-height: 1.2; }
+.fac-person .team-detail { margin-top: 3px; color: #8b8f98; font-size: 11px; line-height: 1.45; }
+.fac-profile { display: inline-block; margin-top: 6px; font: 600 10px/1 'Geist Mono', monospace; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #8ab8ff; border-bottom: 1px solid rgba(138,184,255,0.35); padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; }
+.fac-profile:hover { color: #fff; border-color: #fff; }
+.fac-sources { margin-top: 4px; display: grid; gap: 6px; }
+.fac-sources p { color: #8b8f98; font-size: 10.5px; line-height: 1.5; }
+.fac-sources .fac-note-quiet { color: #5c5c66; }
+/* short screens: the sourcing notes go, so the panel can never run into the footer note */
+@media (max-height: 900px) { .fac-sources { display: none; } }
+@media (max-width: 767px) {
+  .fac-panel { max-height: none; }
+  .fac-group { display: none; }
+  .fac-people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fac-people + .fac-group, .fac-people + .fac-group + .fac-people, .fac-sources { display: none; }
+  .fac-person { grid-template-columns: 34px 1fr; padding: 8px 10px; gap: 8px; }
+  .fac-portrait { width: 34px; border-radius: 10px; }
+  .fac-person .team-detail { display: none; }
+}
+
+/* ================================================================ events — the calendar and its register action */
+.stk-sub { margin: clamp(48px, 8vh, 90px) 0 calc(3vh + 12px); display: grid; gap: 10px; }
+.ec { position: relative; max-width: 1180px; margin: 0 auto; padding: 0 clamp(4px, 1vw, 16px); }
+.ec-head { display: grid; gap: 12px; max-width: 62ch; margin: 0 auto clamp(20px, 3vh, 34px); text-align: center; }
+.ec-title { font-weight: 800; letter-spacing: -0.045em; line-height: 1; font-size: clamp(1.5rem, 3.2vw, 2.6rem); color: #f5f5f2; }
+.ec-note { color: #a1a1aa; font-size: 0.92rem; line-height: 1.6; }
+/* filters: mono chips, one row, scrollable on phones */
+.ec-filters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: clamp(18px, 3vh, 30px); }
+.ec-chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px;
+  font: 600 11px/1 'Geist Mono', monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #a1a1aa;
+  border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.02); transition: color 0.25s, border-color 0.25s, background 0.25s; }
+.ec-chip i { font-style: normal; font-size: 10px; color: #5c5c66; }
+.ec-chip:hover { color: #f5f5f2; border-color: rgba(255,255,255,0.3); }
+.ec-chip.is-on { color: #050505; background: #f5f5f2; border-color: #f5f5f2; }
+.ec-chip.is-on i { color: #6b6b6b; }
+/* rows */
+.ec-list { list-style: none; padding: 0; display: grid; gap: 12px; }
+.ec-row { display: grid; grid-template-columns: 92px minmax(0, 1fr) 236px; gap: clamp(16px, 3vw, 40px); align-items: start;
+  padding: clamp(18px, 2.4vw, 28px); border-radius: 22px; border: 1px solid rgba(255,255,255,0.10);
+  background: linear-gradient(160deg, rgba(47,123,255,0.10), rgba(255,255,255,0.015) 52%), var(--bg-1, #07080b);
+  transition: border-color 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+.ec-row:hover { border-color: rgba(138,184,255,0.42); transform: translateY(-2px); }
+.ec-amber { background: linear-gradient(160deg, rgba(245,184,61,0.10), rgba(255,255,255,0.015) 52%), var(--bg-1, #07080b); }
+.ec-red { background: linear-gradient(160deg, rgba(255,42,31,0.10), rgba(255,255,255,0.015) 52%), var(--bg-1, #07080b); }
+.ec-date { display: grid; place-items: center; align-content: center; gap: 2px; min-height: 74px; border-radius: 16px;
+  border: 1px dashed rgba(255,255,255,0.18); background: rgba(0,0,0,0.35); }
+.ec-day { font: 800 26px/1 'Geist Sans', system-ui, sans-serif; letter-spacing: -0.03em; color: #f5f5f2; }
+.ec-month { font: 600 10px/1 'Geist Mono', monospace; letter-spacing: 0.24em; text-transform: uppercase; color: #8ab8ff; }
+.ec-tba { font: 600 11px/1 'Geist Mono', monospace; letter-spacing: 0.22em; color: #8b8f98; }
+.ec-body { min-width: 0; }
+.ec-series { font: 600 10px/1 'Geist Mono', monospace; letter-spacing: 0.24em; text-transform: uppercase; color: #6ea8ff; }
+.ec-name { margin-top: 10px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.06; font-size: clamp(1.15rem, 2.2vw, 1.8rem); color: #f5f5f2; }
+.ec-blurb { margin-top: 10px; color: #b9bbc2; font-size: 0.95rem; line-height: 1.6; max-width: 62ch; }
+.ec-outcome { margin-top: 10px; color: #8b8f98; font-size: 0.88rem; line-height: 1.55; max-width: 62ch; }
+.ec-outcome strong { color: #d7e2ea; font-weight: 600; }
+.ec-meta { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.ec-meta li { font: 500 11px/1 'Geist Mono', monospace; padding: 7px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); color: #d7e2ea; }
+.ec-action { display: grid; gap: 10px; justify-items: stretch; text-align: center; }
+.ec-state { font: 600 10px/1.3 'Geist Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #8b8f98; }
+.ec-state-open { color: #8ab8ff; }
+.ec-cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 20px; border-radius: 999px;
+  font-weight: 600; font-size: 0.9rem; color: #000; background: #fff; transition: background 0.25s, color 0.25s, border-color 0.25s; }
+.ec-cta:hover { background: #e8eefc; }
+.ec-cta:disabled { background: transparent; color: #5c5c66; border: 1px solid rgba(255,255,255,0.12); cursor: not-allowed; }
+/* the note under the calendar: honest about where a registration goes */
+.ec-foot { margin: clamp(18px, 3vh, 28px) auto 0; max-width: 74ch; text-align: center; color: #8b8f98; font-size: 0.88rem; line-height: 1.6; }
+.ec-foot strong { color: #d7e2ea; }
+@media (max-width: 1000px) {
+  .ec-row { grid-template-columns: 74px minmax(0, 1fr); }
+  .ec-action { grid-column: 1 / -1; grid-auto-flow: column; align-items: center; justify-content: start; gap: 16px; text-align: left; }
+  .ec-cta { width: auto; }
+}
+@media (max-width: 620px) {
+  .ec-row { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
+  .ec-date { grid-auto-flow: column; gap: 10px; min-height: 0; padding: 10px; width: max-content; }
+  .ec-action { grid-auto-flow: row; justify-items: stretch; }
+  .ec-meta li { font-size: 10px; }
+}
+
+/* ================================================================ registration dialog */
+.is-dialog, .is-dialog body { overflow: hidden !important; }
+.reg-backdrop { position: fixed; inset: 0; z-index: 400; display: grid; place-items: center; padding: 20px;
+  background: rgba(2,3,7,0.78); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.reg-dialog { position: relative; width: min(760px, 100%); max-height: min(88svh, 880px); overflow: auto; overscroll-behavior: contain;
+  padding: clamp(22px, 3vw, 34px); border-radius: 24px; border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(12,16,28,0.98), rgba(5,7,12,0.98));
+  box-shadow: 0 40px 120px -30px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.08); }
+.reg-x { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+  color: #a1a1aa; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); transition: color 0.2s, border-color 0.2s; }
+.reg-x:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+.reg-head { display: grid; gap: 10px; padding-right: 48px; }
+.reg-track { width: max-content; font: 600 10px/1 'Geist Mono', monospace; letter-spacing: 0.24em; text-transform: uppercase;
+  padding: 7px 11px; border-radius: 999px; border: 1px solid rgba(110,168,255,0.35); color: #8ab8ff; background: rgba(47,123,255,0.12); }
+.reg-track-amber { border-color: rgba(245,184,61,0.35); color: #f5b83d; background: rgba(245,184,61,0.10); }
+.reg-track-red { border-color: rgba(255,90,90,0.35); color: #ff8080; background: rgba(255,42,31,0.10); }
+.reg-head h3 { font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; font-size: clamp(1.35rem, 2.6vw, 2rem); color: #f5f5f2; }
+.reg-when { font: 500 12px/1.5 'Geist Mono', monospace; color: #8b8f98; }
+.reg-channel-note { display: flex; align-items: flex-start; gap: 10px; margin-top: 18px; padding: 13px 15px; border-radius: 14px;
+  border: 1px solid rgba(110,168,255,0.24); background: rgba(47,123,255,0.08); color: #c7ccd6; font-size: 0.85rem; line-height: 1.55; }
+.reg-channel-note svg { flex: none; margin-top: 2px; color: #8ab8ff; }
+.reg-channel-note strong { color: #fff; }
+.reg-form { display: grid; gap: 16px; margin-top: 20px; }
+.reg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.reg-field { display: grid; gap: 7px; min-width: 0; }
+.reg-label { font: 600 10px/1 'Geist Mono', monospace; letter-spacing: 0.2em; text-transform: uppercase; color: #8b8f98; }
+.reg-label i { font-style: normal; color: #8ab8ff; margin-left: 4px; }
+.reg-field input, .reg-field select, .reg-field textarea { width: 100%; padding: 12px 14px; border-radius: 12px; color: #f5f5f2; font-size: 0.95rem;
+  border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); transition: border-color 0.2s, background 0.2s; }
+.reg-field input::placeholder, .reg-field textarea::placeholder { color: #5c5c66; }
+.reg-field input:focus, .reg-field select:focus, .reg-field textarea:focus { outline: none; border-color: rgba(138,184,255,0.7); background: rgba(255,255,255,0.05); }
+.reg-field input[aria-invalid='true'], .reg-field select[aria-invalid='true'], .reg-field textarea[aria-invalid='true'] { border-color: rgba(255,90,90,0.7); }
+.reg-field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #8b8f98 50%), linear-gradient(135deg, #8b8f98 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+.reg-field textarea { resize: vertical; font-family: inherit; }
+.reg-error { color: #ff8080; font-size: 0.8rem; line-height: 1.45; }
+.reg-consent { display: flex; align-items: flex-start; gap: 10px; color: #b9bbc2; font-size: 0.87rem; line-height: 1.5; }
+.reg-consent input { margin-top: 3px; width: 16px; height: 16px; accent-color: #6ea8ff; }
+.reg-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.reg-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 22px; border-radius: 999px;
+  font-weight: 600; font-size: 0.92rem; color: #d7e2ea; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.04); transition: background 0.25s, color 0.25s, border-color 0.25s; }
+.reg-btn:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+.reg-btn-solid { color: #000; background: #fff; border-color: #fff; }
+.reg-btn-solid:hover { color: #000; background: #e8eefc; }
+.reg-btn:disabled { opacity: 0.65; cursor: progress; }
+.reg-spin { animation: regSpin 0.9s linear infinite; }
+@keyframes regSpin { to { transform: rotate(360deg); } }
+.reg-done { display: grid; gap: 12px; margin-top: 20px; padding: 22px; border-radius: 18px;
+  border: 1px solid rgba(138,184,255,0.28); background: rgba(47,123,255,0.08); }
+.reg-done-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: #050505; background: #8ab8ff; }
+.reg-done-title { font-weight: 700; letter-spacing: -0.02em; font-size: 1.1rem; color: #f5f5f2; }
+.reg-done-text { color: #b9bbc2; font-size: 0.9rem; line-height: 1.6; }
+.reg-embed { display: grid; gap: 12px; margin-top: 18px; }
+.reg-embed iframe { width: 100%; border-radius: 14px; background: #fff; }
+@media (max-width: 640px) {
+  .reg-backdrop { padding: 0; align-items: end; }
+  .reg-dialog { width: 100%; max-height: 92svh; border-radius: 22px 22px 0 0; }
+  .reg-grid { grid-template-columns: 1fr; }
+  .reg-actions .reg-btn { flex: 1 1 auto; }
+}
+@media (prefers-reduced-motion: reduce) { .ec-row, .ec-row:hover { transform: none; } .reg-spin { animation: none; } }
+
+/* ================================================================ the loader's glass mark
+   The chapter's supplied artwork, ported from its standalone page. The stylesheet it came with is
+   reproduced here, scoped to .lgm so nothing else on the page is affected. */
+.lgm { position: relative; width: 100%; aspect-ratio: 1; will-change: transform;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 180ms ease-out; }
+/* the soft aura behind the glass */
+.lgm::before { content: ''; position: absolute; inset: 15%; border-radius: 50%;
+  background: radial-gradient(circle, #0b213930, transparent 68%); filter: blur(28px);
+  animation: lgmBreathe 5s ease-in-out infinite; }
+.lgm svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* the rim and the inner flow turn in opposite directions, slowly */
+.lgm-rim { transform-origin: 220px 220px; animation: lgmOrbit 48s linear infinite; }
+.lgm-inner-flow { transform-origin: 220px 220px; animation: lgmOrbit 65s linear infinite reverse; }
+.lgm-spark { transform-box: fill-box; transform-origin: center; animation: lgmSparkle 3.5s ease-in-out infinite; }
+.lgm-spark:nth-of-type(2) { animation-delay: -1.2s; }
+.lgm-spark:nth-of-type(3) { animation-delay: -2.4s; }
+@keyframes lgmOrbit { to { transform: rotate(360deg); } }
+@keyframes lgmBreathe { 50% { opacity: .45; transform: scale(1.1); } }
+@keyframes lgmSparkle { 0%, 100% { opacity: .25; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.2); } }
+/* in the loader the mark *is* the sphere, so the stage keeps only its size, and the mark fills
+   most of the bezel opening the way the supplied artwork fills its own frame */
+.ig-liquid--mark { background: none; box-shadow: none; }
+.ig-liquid--mark::after { content: none; }
+.ig-stage .ig-mono-pos { width: 88%; }

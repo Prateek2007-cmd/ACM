@@ -55,11 +55,21 @@ export const EXTERNAL = {
 };
 
 /**
+ * The chapter's publicly listed mailbox: the ACM India chapter directory lists the
+ * "Vasavi College of Engineering ACM Student Chapter" with this address (india.acm.org/chapters),
+ * and it is the only contact for the chapter published anywhere. Registrations fall back to it when
+ * no form endpoint is configured, so it lives in one place.
+ */
+export const CONTACT = {
+  email: 'acmsc.vce@gmail.com' as string | null,
+};
+
+/**
  * Details that are NOT published anywhere verifiable. They are shown as "Coming soon"
  * instead of being invented. Replace the values here once the chapter confirms them.
  */
 export const PENDING = {
-  email: null as string | null,
+  email: CONTACT.email,
   facultyAdvisor: null as string | null,
   instagram: null as string | null,
   linkedin: null as string | null,

@@ -3,13 +3,17 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
 import Visual, { type VisualKind } from './Visual';
+import EventCalendar from './EventCalendar';
 import { reducedMotion } from '../lib/store';
 import { PROGRAMMES } from '../data/content';
 import { EXTERNAL } from '../data/brand';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Programme tracks as sticky cards that stack and recede as the next one arrives. */
+/**
+ * Events — the chapter's calendar (events + registrations) followed by the programme tracks those
+ * dates are drawn from, as sticky cards that stack and recede as the next one arrives.
+ */
 export default function Events() {
   const root = useRef<HTMLElement>(null);
   const counter = useRef<HTMLSpanElement>(null);
@@ -61,11 +65,18 @@ export default function Events() {
   }, []);
 
   return (
-    <section id="events" ref={root} className="stk" aria-label="Programme tracks">
+    <section id="events" ref={root} className="stk" aria-label="Chapter events and programme tracks">
       <div className="stk-head">
-        <p className="eyebrow-label text-[#6EA8FF]">03 / Programmes</p>
-        <h2 className="hero-gradient stk-title">Programmes</h2>
-        <p className="acm-kicker mx-auto text-center">Recurring tracks the chapter runs — not one-off events.</p>
+        <p className="eyebrow-label text-[#6EA8FF]">03 / Events</p>
+        <h2 className="hero-gradient stk-title">Events</h2>
+        <p className="acm-kicker mx-auto text-center">This term’s calendar, and the recurring tracks it is built from.</p>
+      </div>
+
+      <EventCalendar />
+
+      <div className="stk-sub">
+        <p className="eyebrow-label text-[#6EA8FF]">Recurring tracks</p>
+        <p className="acm-kicker mx-auto text-center">Every date above belongs to one of these four tracks.</p>
       </div>
       <div className="stk-counter lg" aria-hidden="true"><span ref={counter}>01</span> / {String(PROGRAMMES.length).padStart(2, '0')}</div>
       {PROGRAMMES.map((c, i) => (

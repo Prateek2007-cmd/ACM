@@ -13,6 +13,7 @@
 import {
   BALL, CYCLE, LETTERS, RIPPLE_MAX, SLOTS, SMOOTH_K, fieldAt, nearestOnCapsule, smin, stateAt, type Capsule,
 } from '../src/lib/liquid.ts';
+import { waterShade, type Rgba, type WaterSample } from '../src/lib/water.ts';
 
 let failures = 0;
 const check = (name: string, ok: boolean, detail = '') => {
@@ -134,11 +135,14 @@ for (let i = 0; i < LETTERS.length; i++) {
 
 console.log('\n5. render cost (the dominant per-pixel loop, in Node/V8)\n');
 
-// The renderer's cost is one capsule test per slot per pixel, plus one extra sqrt for the
-// shading normal. This measures that exact loop so the buffer size stays a measured choice.
+// The renderer's cost is one capsule test per slot per pixel, plus one extra sqrt for the shading
+// normal, plus the shade itself (which is what LiquidMonogram actually calls). This measures that
+// exact loop, so the buffer size stays a measured choice rather than a guess.
 const loopCost = (px: number) => {
   const caps = at(0.44 * CYCLE);
   const o = { d: 0, ex: 0, ey: 0 };
+  const sample: WaterSample = { ux: 0, uy: 0, f: 0, x: 0, y: 0, time: 0 };
+  const shade: Rgba = { r: 0, g: 0, b: 0, a: 1 };
   let sink = 0;
   const frames = 12;
   const t = performance.now();
@@ -148,14 +152,26 @@ const loopCost = (px: number) => {
       for (let pxi = 0; pxi < px; pxi++) {
         const x = pxi / px;
         let fl = Infinity;
+        let nearest = Infinity;
+        let nx = 0, ny = 0;
         for (let i = 0; i < SLOTS; i++) {
           const c = caps[i];
           if (c.r <= 0.0005) continue;
           nearestOnCapsule(c, x, y, o);
-          sink += Math.sqrt(o.ex * o.ex + o.ey * o.ey);
+          const d = Math.sqrt(o.ex * o.ex + o.ey * o.ey);
+          if (d < nearest) { nearest = d; nx = o.ex; ny = o.ey; }
+          sink += d;
           fl = fl === Infinity ? o.d : smin(fl, o.d, SMOOTH_K);
         }
-        sink += fl;
+        const inv = nearest > 1e-6 ? 1 / nearest : 0;
+        sample.ux = nx * inv;
+        sample.uy = ny * inv;
+        sample.f = fl;
+        sample.x = x;
+        sample.y = y;
+        sample.time = f * 0.016;
+        waterShade(sample, shade);
+        sink += fl + shade.r + shade.g + shade.b;
       }
     }
   }

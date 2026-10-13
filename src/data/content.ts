@@ -99,10 +99,30 @@ export const IMPACT = [
 ];
 
 /**
- * Faculty. The chapter's advisor and coordinator are not publicly attributed anywhere we can
- * verify, so the roles are shown and the names stay placeholders — never guessed. When the
- * chapter confirms them, put the real name in `name` here and it appears everywhere.
+ * Faculty.
+ *
+ * Who sits where, and what is allowed to be claimed:
+ *   · the chapter's own advisor and coordinator are not publicly attributed anywhere verifiable, so
+ *     the roles are shown and the names stay placeholders — never guessed;
+ *   · the two heads of department below are published on the college's own faculty pages, and they
+ *     are listed as exactly that — heads of the departments the chapter sits alongside, not as
+ *     chapter office bearers.
+ *
+ * Portraits: every person has a `photo` slot. Drop a square image under `public/media/faculty/` and
+ * set `photo` to its path (relative to /public) — it appears immediately. With no photo the card
+ * shows the initials on a neutral plate, so a missing picture never looks like a broken one.
  */
+export type FacultyPerson = {
+  role: string;
+  name: string;
+  detail: string;
+  /** Path relative to /public, or null for the initials placeholder. */
+  photo: string | null;
+  /** Set for the department leadership below; the chapter's own people have no profile link. */
+  department?: string;
+  profile?: string | null;
+};
+
 export const FACULTY = {
   eyebrow: 'Faculty',
   title: 'Guided by the department,',
@@ -110,9 +130,39 @@ export const FACULTY = {
   lead: 'An ACM student chapter works with faculty from its own institution. At Vasavi College of Engineering the chapter sits alongside the Department of Computer Science and Engineering and the Department of Information Technology.',
   note: 'The faculty advisor is the bridge between the students and the department: approving the calendar, opening lab and auditorium access, and keeping the chapter aligned with what ACM expects of a student chapter.',
   people: [
-    { role: 'Faculty Advisor', name: 'To be announced', detail: 'Signs off on the chapter’s activities and represents it to the department and to ACM.' },
-    { role: 'Faculty Coordinator', name: 'To be announced', detail: 'Coordinates lab access, scheduling and the academic side of workshops and contests.' },
-  ],
+    { role: 'Faculty Advisor', name: 'To be announced', detail: 'Signs off on the chapter’s activities and represents it to the department and to ACM.', photo: null },
+    { role: 'Faculty Coordinator', name: 'To be announced', detail: 'Coordinates lab access, scheduling and the academic side of workshops and contests.', photo: null },
+  ] as FacultyPerson[],
+  /**
+   * Heads of the two departments the chapter sits alongside. Names and designations as published
+   * on vce.ac.in faculty pages (and the HOD profile pages linked here) — nothing inferred.
+   */
+  departments: [
+    {
+      role: 'Head of Department',
+      name: 'Dr. Nagaratna P. Hegde',
+      department: 'Computer Science and Engineering',
+      detail: 'Professor & Head, Department of CSE.',
+      photo: null,
+      profile: 'https://vce.ac.in/departments/cse/cse-dept-hod-profile.php',
+    },
+    {
+      role: 'Head of Department',
+      name: 'Dr. K. Ram Mohan Rao',
+      department: 'Information Technology',
+      detail: 'Professor & Head, Department of IT.',
+      photo: null,
+      profile: 'https://vce.ac.in/departments/it/it-dept-hod-profile.php',
+    },
+  ] as FacultyPerson[],
+  groups: {
+    chapter: 'Chapter faculty',
+    departments: 'Departments the chapter sits alongside',
+  },
+  photoNote:
+    'Portrait slots are in place: add a square photo under public/media/faculty/ and set `photo` on the person in src/data/content.ts. Until a photo exists the card shows their initials — a placeholder, never a stand-in face.',
+  sourceNote:
+    'Advisor and coordinator: the chapter has not published them, so the roles are shown unnamed. Department heads: names, designations and profile links come from the college’s own pages on vce.ac.in.',
   readout: { label: 'Faculty advisor', value: 'To be announced', status: 'Confirmation pending' },
 };
 
