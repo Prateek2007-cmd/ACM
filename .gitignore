@@ -16,3 +16,10 @@ site-copy/
 !.vscode/extensions.json
 .idea/
 *.local
+
+# environment variables
+.env
+.env.production
+.env.local
+.env.*.local
+
