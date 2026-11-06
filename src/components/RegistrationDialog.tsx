@@ -157,7 +157,15 @@ export default function RegistrationDialog({ event, onClose }: { event: EventEnt
 
             {channel === 'form' && embed ? (
               <div className="reg-embed">
-                <iframe src={embed} title={`Registration form for ${event.title}`} loading="lazy" style={{ border: 0 }} width="100%" height="520" />
+                <iframe
+                  src={embed}
+                  title={`Registration form for ${event.title}`}
+                  loading="lazy"
+                  style={{ border: 0 }}
+                  width="100%"
+                  height="520"
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                />
                 <a className="reg-btn" href={embed} target="_blank" rel="noopener noreferrer" data-cursor="magnetic">
                   Open the form in a new tab <ArrowUpRight size={14} aria-hidden="true" />
                 </a>
